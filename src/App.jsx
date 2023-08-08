@@ -2,6 +2,7 @@ import { useState } from "react";
 import './App.css';
 import search from './assets/search.svg';
 import MovieCard from "./components/MovieCard";
+import AqiMeter from "./components/AqiMeter";
 
 const API_URL = 'https://www.omdbapi.com/?apikey=cf8fc86b';
 
