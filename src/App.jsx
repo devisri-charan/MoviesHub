@@ -2,7 +2,6 @@ import { useState } from "react";
 import './App.css';
 import search from './assets/search.svg';
 import MovieCard from "./components/MovieCard";
-import AqiMeter from "./components/AqiMeter";
 
 const API_URL = 'https://www.omdbapi.com/?apikey=cf8fc86b';
 
@@ -11,10 +10,19 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
 
   const searchMovies = async (title) => {
-    const res = await fetch(`${API_URL}&s=${title}`);
-    const data = await res.json();
+    try {
+      const res = await fetch(`${API_URL}&s=${title}`);
+      const data = await res.json();
 
-    setMovies(data.Search);
+      if (data.Search) {
+        setMovies(data.Search);
+      } else {
+        setMovies([]);
+      }
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+      setMovies([]);
+    }
   };
 
   return (
@@ -22,7 +30,7 @@ function App() {
       <h1>MoviesHub</h1>
 
       <div className="search">
-        <input type="text" placeholder="Search..." value={searchValue} onChange={(e) => {setSearchValue(e.target.value)}}/>
+        <input type="text" placeholder="Search..." value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} />
         <img src={search} alt="search" onClick={() => searchMovies(searchValue)} />
       </div>
 
@@ -30,7 +38,7 @@ function App() {
         movies.length > 0 ? (
           <div className="container">
             {movies.map((movie, index) => (
-              <MovieCard movie={movie} key={index}/>
+              <MovieCard movie={movie} key={index} />
             ))}
           </div>
         ) : (
